@@ -55,6 +55,10 @@ func addProduct() Product {
 	return newProduct
 }
 
+func find() {
+
+}
+
 func main() {
 
 	aproduct1 := Product{2, "cheese", 3.4, 5}
