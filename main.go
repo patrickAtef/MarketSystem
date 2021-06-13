@@ -55,10 +55,6 @@ func addProduct() Product {
 	return newProduct
 }
 
-func find() {
-
-}
-
 func main() {
 
 	aproduct1 := Product{2, "cheese", 3.4, 5}
@@ -96,6 +92,7 @@ func main() {
 
 }
 func chooseFromMenu() int {
+	//ay 7ga test
 	var input int
 	fmt.Print("choose one of the following operations:\n")
 	fmt.Print("1. view all products\n")
