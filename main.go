@@ -8,7 +8,6 @@ import (
 	"strings"
 )
 
-//test
 type Product struct {
 	id       int
 	name     string
