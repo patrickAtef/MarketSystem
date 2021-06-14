@@ -45,7 +45,18 @@ func inputByte(message string) byte {
 
 }
 
+//3ayzha mn 8er 3nawen 3shan printall
 func printProduct(aproduct Product) {
+	fmt.Printf("%4v| %12v| %12v| %12v|\n", aproduct.id, aproduct.name, aproduct.price, aproduct.quantity)
+}
+
+func printLabels() {
+	fmt.Printf("%4v| %12v| %12v| %12v|\n", " id", "name", "price", " quantity")
+}
+
+//zwd feha el 3nawen fo2
+func printProductWithLabels(aproduct Product) {
+	printLabels()
 	fmt.Printf("%4v| %12v| %12v| %12v|\n", aproduct.id, aproduct.name, aproduct.price, aproduct.quantity)
 }
 
@@ -65,7 +76,20 @@ func addProduct(newID int) Product {
 	newProduct.quantity = int(inputNumber("enter Product quantity:"))
 	return newProduct
 }
+func findExistingproduct(productArr []Product) Product {
+	var existingProduct string
+	var wantedProduct Product
+	existingProduct = inputString("enter the name of product that you are looking for:")
+	for e := range productArr {
+		if existingProduct == productArr[e].name {
+			fmt.Printf("%v is available:\n", existingProduct)
+			wantedProduct = productArr[e]
+			printProductWithLabels(wantedProduct)
+		}
 
+	}
+	return wantedProduct
+}
 func main() {
 
 	aproduct1 := Product{1, "cheese", 3.4, 5}
@@ -80,12 +104,13 @@ func main() {
 
 		menuChoice := chooseFromMenu()
 		//menuChoice := 1
-
+		if menuChoice == 6 {
+			break
+		}
 		switch menuChoice {
 		case 1:
 			{
-				fmt.Printf("%4v| %12v| %12v| %12v|\n", " id", "name", "price", " quantity")
-
+				printLabels()
 				printAllProducts(productArray)
 
 			}
@@ -94,16 +119,19 @@ func main() {
 				newSize := len(productArray) + 1
 				productArray = append(productArray, addProduct(newSize))
 			}
-
+			//3. find existing product
 		case 3:
-			fmt.Print("3. find existing product\n")
+			findExistingproduct(productArray)
+			// fmt.Print("4. edit existing product\n")
 		case 4:
 			fmt.Print("4. edit existing product\n")
+			// fmt.Print("5. delete existing product\n")
 		case 5:
 			fmt.Print("5. delete existing product\n")
-		case 6:
-			fmt.Print("6. exit\n")
+			// fmt.Print("6. exit\n")
+
 		}
+
 		fmt.Println("---------------------------------------")
 		repeatAnswer = inputByte("press N to exit, any other key to go back to main menu:")
 		if repeatAnswer == 'n' || repeatAnswer == 'N' {
