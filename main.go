@@ -93,7 +93,6 @@ func main() {
 			{
 				newSize := len(productArray) + 1
 				productArray = append(productArray, addProduct(newSize))
-				printAllProducts(productArray)
 			}
 
 		case 3:
