@@ -90,6 +90,36 @@ func findExistingproduct(productArr []Product) Product {
 	}
 	return wantedProduct
 }
+
+func editProduct(productArr []Product, p Product) []Product {
+	var i int
+	var data string
+	var NPrice float64
+	var NQuantity int
+	fmt.Println("1- Edit product Name ")
+	fmt.Println("2- Edit product price ")
+	fmt.Println("3- Edit product quantity ")
+	i = int(inputNumber("choose what you want to edit (1 to 3)."))
+	if i == 1 {
+		data = inputString("Enter the new name of the product :")
+		p.name = data
+		fmt.Println(p.name)
+	} else if i == 2 {
+		NPrice = inputNumber("Enter the new price of the product :")
+		p.price = float32(NPrice)
+		fmt.Println(p.price)
+	} else if i == 3 {
+		NQuantity = int(inputNumber("Enter the new quantity of the product :"))
+		p.quantity = NQuantity
+		fmt.Println(p.quantity)
+	}
+	return productArr
+}
+
+func deleteproduct(s []Product, index int) []Product {
+	return append(s[:index], s[index+1:]...)
+}
+
 func main() {
 
 	aproduct1 := Product{1, "cheese", 3.4, 5}
@@ -125,13 +155,15 @@ func main() {
 			// fmt.Print("4. edit existing product\n")
 		case 4:
 			fmt.Print("4. edit existing product\n")
-			// fmt.Print("5. delete existing product\n")
+			var item Product = findExistingproduct(productArray)
+			productArray = editProduct(productArray, item)
+			printAllProducts(productArray)
 		case 5:
-			fmt.Print("5. delete existing product\n")
+			var pID int = int(inputNumber("Enter the ID of the product you want to delete :"))
+			productArray = deleteproduct(productArray, pID)
 			// fmt.Print("6. exit\n")
 
 		}
-
 		fmt.Println("---------------------------------------")
 		repeatAnswer = inputByte("press N to exit, any other key to go back to main menu:")
 		if repeatAnswer == 'n' || repeatAnswer == 'N' {
