@@ -9,7 +9,6 @@ import (
 )
 
 type Product struct {
-	id       int
 	name     string
 	price    float32
 	quantity int
@@ -47,17 +46,18 @@ func inputByte(message string) byte {
 
 //3ayzha mn 8er 3nawen 3shan printall
 func printProduct(aproduct Product) {
-	fmt.Printf("%4v| %12v| %12v| %12v|\n", aproduct.id, aproduct.name, aproduct.price, aproduct.quantity)
+	fmt.Printf("%12v| %12v| %12v|\n", aproduct.name, aproduct.price, aproduct.quantity)
 }
 
 func printLabels() {
-	fmt.Printf("%4v| %12v| %12v| %12v|\n", " id", "name", "price", " quantity")
+	fmt.Printf("%12v| %12v| %12v|\n", "name", "price", " quantity")
+	fmt.Println("    --------------------------------------")
 }
 
-//zwd feha el 3nawen fo2
+//zwd feha el 3nawen fo2y
 func printProductWithLabels(aproduct Product) {
 	printLabels()
-	fmt.Printf("%4v| %12v| %12v| %12v|\n", aproduct.id, aproduct.name, aproduct.price, aproduct.quantity)
+	fmt.Printf("%12v| %12v| %12v|\n", aproduct.name, aproduct.price, aproduct.quantity)
 }
 
 func printAllProducts(productArr []Product) {
@@ -68,30 +68,31 @@ func printAllProducts(productArr []Product) {
 	}
 }
 
-func addProduct(newID int) Product {
+func addProduct() Product {
 	var newProduct Product
-	newProduct.id = newID
 	newProduct.name = inputString("enter Product name:")
 	newProduct.price = float32(inputNumber("enter Product price:"))
 	newProduct.quantity = int(inputNumber("enter Product quantity:"))
+	fmt.Printf("%v is added successfully\n", newProduct.name)
 	return newProduct
 }
-func findExistingproduct(productArr []Product) Product {
+func findExistingproduct(productArr []Product) int {
 	var existingProduct string
-	var wantedProduct Product
+	var wantedProduct int
 	existingProduct = inputString("enter the name of product that you are looking for:")
 	for e := range productArr {
 		if existingProduct == productArr[e].name {
 			fmt.Printf("%v is available:\n", existingProduct)
-			wantedProduct = productArr[e]
-			printProductWithLabels(wantedProduct)
+			wantedProduct = e
+			printProductWithLabels(productArr[e])
 		}
 
 	}
+
 	return wantedProduct
 }
 
-func editProduct(productArr []Product, p Product) []Product {
+func editProduct(p Product) Product {
 	var i int
 	var data string
 	var NPrice float64
@@ -103,29 +104,30 @@ func editProduct(productArr []Product, p Product) []Product {
 	if i == 1 {
 		data = inputString("Enter the new name of the product :")
 		p.name = data
-		fmt.Println(p.name)
 	} else if i == 2 {
 		NPrice = inputNumber("Enter the new price of the product :")
 		p.price = float32(NPrice)
-		fmt.Println(p.price)
 	} else if i == 3 {
 		NQuantity = int(inputNumber("Enter the new quantity of the product :"))
 		p.quantity = NQuantity
-		fmt.Println(p.quantity)
 	}
-	return productArr
+	fmt.Print("new data after editing is:\n")
+	printProductWithLabels(p)
+
+	return p
 }
 
 func deleteproduct(s []Product, index int) []Product {
+	fmt.Println("product is deleted successfully")
 	return append(s[:index], s[index+1:]...)
 }
 
 func main() {
 
-	aproduct1 := Product{1, "cheese", 3.4, 5}
-	aproduct6 := Product{2, "Mushroom", 8.9, 10}
-	aproduct11 := Product{3, "milk", 13.14, 15}
-	aproduct16 := Product{4, "water", 18.19, 20}
+	aproduct1 := Product{"cheese", 3.4, 5}
+	aproduct6 := Product{"Mushroom", 8.9, 10}
+	aproduct11 := Product{"milk", 13.14, 15}
+	aproduct16 := Product{"water", 18.19, 20}
 	productArray := []Product{aproduct1, aproduct6, aproduct11, aproduct16}
 
 	var repeatAnswer byte
@@ -142,29 +144,27 @@ func main() {
 			{
 				printLabels()
 				printAllProducts(productArray)
-
 			}
 		case 2:
 			{
-				newSize := len(productArray) + 1
-				productArray = append(productArray, addProduct(newSize))
+				productArray = append(productArray, addProduct())
 			}
-			//3. find existing product
 		case 3:
 			findExistingproduct(productArray)
-			// fmt.Print("4. edit existing product\n")
 		case 4:
-			fmt.Print("4. edit existing product\n")
-			var item Product = findExistingproduct(productArray)
-			productArray = editProduct(productArray, item)
-			printAllProducts(productArray)
+			var itemID int = findExistingproduct(productArray)
+			productArray[itemID] = editProduct(productArray[itemID])
 		case 5:
-			var pID int = int(inputNumber("Enter the ID of the product you want to delete :"))
-			productArray = deleteproduct(productArray, pID)
-			// fmt.Print("6. exit\n")
+			pID := findExistingproduct(productArray)
+			deleteAnswer := inputByte("press N to cancel, any other key to continue:")
+			if deleteAnswer == 'n' || deleteAnswer == 'N' {
+				fmt.Println("operation is cancelled.")
+			} else {
+				productArray = deleteproduct(productArray, pID)
+			}
 
 		}
-		fmt.Println("---------------------------------------")
+		fmt.Println("-------------------------------------------")
 		repeatAnswer = inputByte("press N to exit, any other key to go back to main menu:")
 		if repeatAnswer == 'n' || repeatAnswer == 'N' {
 			break
